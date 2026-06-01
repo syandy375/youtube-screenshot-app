@@ -15,7 +15,12 @@ def capture_youtube_screenshots(youtube_url, num_screenshots=10):
     # 1. yt-dlpのダウンロード設定（YouTubeの403ブロックを回避する最強の組み合わせ）
     ydl_opts_download = {
         # 403エラーを激減させる魔法のフォーマット指定（軽量な映像+音声、または音声のみを狙う）
-        'format': 'worstvideo[ext=mp4]+worstaudio[ext=m4a]/worst[ext=mp4]/bestaudio/worst',
+        # ❌ いまこうなっている部分を…
+        # 'format': 'worstvideo[ext=mp4]+worstaudio[ext=m4a]/worst[ext=mp4]/bestaudio/worst',
+
+        # ⭕️ この「合体不要・最軽量のmp4単体」の設定に書き換えてください！
+        'format': 'worst[ext=mp4]/worst',
+        
         'outtmpl': temp_video_path,
         'overwrites': True,
         'quiet': True,
