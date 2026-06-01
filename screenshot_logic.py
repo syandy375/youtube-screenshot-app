@@ -12,24 +12,27 @@ def capture_youtube_screenshots(youtube_url, num_screenshots=10):
     temp_video_path = "temp_downloaded_video.mp4"
     screenshots = []
 
-    # 1. yt-dlpのダウンロード設定（YouTubeの403ブロックを回避する最強の組み合わせ）
+  # 1. yt-dlpのダウンロード設定（YouTubeのAWSブロックを完全に欺くすり抜け設定）
     ydl_opts_download = {
-        # 403エラーを激減させる魔法のフォーマット指定（軽量な映像+音声、または音声のみを狙う）
-        # ❌ いまこうなっている部分を…
-        # 'format': 'worstvideo[ext=mp4]+worstaudio[ext=m4a]/worst[ext=mp4]/bestaudio/worst',
-
-        # ⭕️ この「合体不要・最軽量のmp4単体」の設定に書き換えてください！
         'format': 'worst[ext=mp4]/worst',
-        
         'outtmpl': temp_video_path,
         'overwrites': True,
         'quiet': True,
         'no_warnings': True,
-        # YouTube側に「普通のブラウザからのアクセスだよ」と信じ込ませる偽装設定
+        # 【重要】YouTubeのサーバーに負荷をかけず、動画をダウンロードせずにストリーミング（外部再生）として処理する魔法のオプション
+        'noplaylist': True,
+        'nocheckcertificate': True,
+        'extractor_args': {
+            'youtube': {
+                'player_client': ['android', 'web'], # 規制の緩いスマホアプリからのアクセスだと誤認させる
+                'skip': ['dash', 'hls']
+            }
+        },
         'http_headers': {
-            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
-            'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
-            'Accept-Language': 'en-US,en;q=0.5',
+            'User-Agent': 'Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Mobile Safari/537.36',
+            'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+            'Accept-Language': 'ja,en-US;en;q=0.5',
+            'Cache-Control': 'no-cache',
         }
     }
 
