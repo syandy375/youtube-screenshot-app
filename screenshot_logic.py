@@ -12,14 +12,20 @@ def capture_youtube_screenshots(youtube_url, num_screenshots=10):
     temp_video_path = "temp_downloaded_video.mp4"
     screenshots = []
 
-    # 1. yt-dlpのダウンロード設定（サーバーに負荷をかけないよう最軽量画質を狙う）
+    # 1. yt-dlpのダウンロード設定（YouTubeの403ブロックを回避する最強の組み合わせ）
     ydl_opts_download = {
-        # 480p以下のmp4形式、それがなければ一番軽い動画をダウンロード
-        'format': 'mp4[height<=480]/best[height<=480]/worstvideo', 
+        # 403エラーを激減させる魔法のフォーマット指定（軽量な映像+音声、または音声のみを狙う）
+        'format': 'worstvideo[ext=mp4]+worstaudio[ext=m4a]/worst[ext=mp4]/bestaudio/worst',
         'outtmpl': temp_video_path,
         'overwrites': True,
         'quiet': True,
-        'no_warnings': True
+        'no_warnings': True,
+        # YouTube側に「普通のブラウザからのアクセスだよ」と信じ込ませる偽装設定
+        'http_headers': {
+            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+            'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
+            'Accept-Language': 'en-US,en;q=0.5',
+        }
     }
 
     try:
