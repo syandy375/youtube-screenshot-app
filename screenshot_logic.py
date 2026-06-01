@@ -3,7 +3,7 @@ import yt_dlp
 import os
 import math
 
-def get_video_screenshots(youtube_url, num_screenshots=10):
+def capture_youtube_screenshots(youtube_url, num_screenshots=10):
     """
     YouTube動画から指定された枚数のスクリーンショットを均等な間隔で抽出する関数。
     Streamlit Cloud（Linux環境）でのOpenCVのURL読み込みバグを回避するため、
